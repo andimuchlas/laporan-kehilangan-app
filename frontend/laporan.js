@@ -7,7 +7,7 @@ document.getElementById('formLaporan').addEventListener('submit', async function
   console.log('📤 Mengirim data:', [...formData.entries()]);
 
   try {
-    const response = await fetch('../backend/api/laporan.php', {
+    const response = await fetch('laporan-kehilangan-app-production.up.railway.app/api/laporan.php', {
       method: 'POST',
       body: formData
     });
