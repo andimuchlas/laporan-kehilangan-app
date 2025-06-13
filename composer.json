@@ -1,0 +1,14 @@
+{
+    "name": "andim/web-m",
+    "description": "Aplikasi laporan kehilangan dengan AWS dan PostgreSQL",
+    "authors": [
+        {
+            "name": "andimuchlas",
+            "email": "113867653+andimuchlas@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "aws/aws-sdk-php": "^3.344",
+        "vlucas/phpdotenv": "^5.6"
+    }
+}

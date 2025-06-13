@@ -1,0 +1,21 @@
+CREATE TABLE laporan_kehilangan (
+    id SERIAL PRIMARY KEY,
+    nama_barang TEXT,
+    merek_model TEXT,
+    warna TEXT,
+    kode_unik TEXT,
+    ciri_khusus TEXT,
+    nilai_estimasi NUMERIC,
+    foto_url TEXT,
+    waktu_terakhir TIMESTAMP,
+    tempat_terakhir TEXT,
+    lokasi_dugaan TEXT,
+    kronologi TEXT,
+    nama TEXT,
+    identitas TEXT,
+    no_hp TEXT,
+    email TEXT,
+    alamat TEXT,
+    bukti_url TEXT[],
+    created_at TIMESTAMP DEFAULT NOW()
+);

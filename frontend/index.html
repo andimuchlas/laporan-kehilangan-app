@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Laporan Kehilangan Barang</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Lapor Kehilangan Barang</h1>
+      <p>Bantu temukan kembali barang yang hilang dengan melaporkan detail berikut.</p>
+    </header>
+
+    <form id="formLaporan" enctype="multipart/form-data">
+      <!-- Informasi Barang -->
+      <h2>Informasi Barang yang Hilang</h2>
+
+      <div class="form-group">
+        <label>Nama Barang</label>
+        <input type="text" name="nama_barang" required />
+      </div>
+
+      <div class="form-group">
+        <label>Merek dan Model</label>
+        <input type="text" name="merek_model" required />
+      </div>
+
+      <div class="form-group">
+        <label>Warna Barang</label>
+        <input type="text" name="warna" required />
+      </div>
+
+      <div class="form-group">
+        <label>Nomor Seri / IMEI / Kode Unik</label>
+        <input type="text" name="kode_unik" />
+      </div>
+
+      <div class="form-group">
+        <label>Ciri-ciri Khusus</label>
+        <textarea name="ciri_khusus" required placeholder="Contoh: Ada stiker di belakang, goresan kanan bawah..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Nilai Estimasi Barang (Rp)</label>
+        <input type="number" name="nilai_estimasi" min="0" required />
+      </div>
+
+      <div class="form-group">
+        <label>Foto Barang (jika ada)</label>
+        <input type="file" name="foto_barang" accept="image/*" />
+      </div>
+
+      <!-- Waktu & Tempat -->
+      <h2>Waktu dan Tempat Kehilangan</h2>
+
+      <div class="form-group">
+        <label>Tanggal & Jam Terakhir Terlihat</label>
+        <input type="datetime-local" name="waktu_terakhir" required />
+      </div>
+
+      <div class="form-group">
+        <label>Tempat Terakhir Dilihat</label>
+        <input type="text" name="tempat_terakhir" required />
+      </div>
+
+      <div class="form-group">
+        <label>Lokasi Dugaan Kehilangan</label>
+        <input type="text" name="lokasi_dugaan" required />
+      </div>
+
+      <!-- Kronologi -->
+      <h2>Kronologi Kehilangan</h2>
+
+      <div class="form-group">
+        <label>Deskripsi Kronologi Kejadian</label>
+        <textarea name="kronologi" required placeholder="Ceritakan bagaimana barang bisa hilang..."></textarea>
+      </div>
+
+      <!-- Informasi Pelapor -->
+      <h2>Informasi Pelapor</h2>
+
+      <div class="form-group">
+        <label>Nama Pelapor</label>
+        <input type="text" name="nama" required />
+      </div>
+
+      <div class="form-group">
+        <label>Nomor KTP / SIM</label>
+        <input type="text" name="identitas" required />
+      </div>
+
+      <div class="form-group">
+        <label>Nomor HP</label>
+        <input type="tel" name="no_hp" required />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" required />
+      </div>
+
+      <div class="form-group">
+        <label>Alamat Domisili</label>
+        <textarea name="alamat" required></textarea>
+      </div>
+
+      <!-- Bukti Tambahan -->
+      <h2>Bukti Tambahan (Opsional)</h2>
+
+      <div class="form-group">
+        <label>Unggah Bukti Tambahan (Nota, CCTV, dll)</label>
+        <input type="file" name="bukti_tambahan" multiple />
+      </div>
+
+      <!-- Tombol Submit -->
+      <button type="submit">Kirim Laporan</button>
+    </form>
+
+    <div id="status"></div>
+  </div>
+
+  <script src="laporan.js"></script>
+</body>
+</html>

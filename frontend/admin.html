@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin - Laporan Kehilangan</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background-color: white;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+    a.view-image {
+      color: #007bff;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* Modal styling */
+    #image-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #image-modal img {
+      max-width: 90%;
+      max-height: 90%;
+      box-shadow: 0 0 10px #000;
+      border-radius: 8px;
+    }
+
+    #image-modal span {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📋 Daftar Laporan Kehilangan</h1>
+  <table id="laporan-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nama Barang</th>
+        <th>Merek/Model</th>
+        <th>Warna</th>
+        <th>Waktu Terakhir</th>
+        <th>Lokasi Dugaan</th>
+        <th>Pelapor</th>
+        <th>Foto</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- Modal untuk melihat gambar -->
+  <div id="image-modal">
+    <span id="close-modal">&times;</span>
+    <img id="modal-image" src="" alt="Foto Barang" />
+  </div>
+
+  <script>
+    fetch('../backend/api/get_laporan.php')
+      .then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          const tbody = document.querySelector('#laporan-table tbody');
+          json.data.forEach(row => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${row.id}</td>
+              <td>${row.nama_barang}</td>
+              <td>${row.merek_model}</td>
+              <td>${row.warna}</td>
+              <td>${row.waktu_terakhir}</td>
+              <td>${row.lokasi_dugaan}</td>
+              <td>${row.nama_pelapor}</td>
+              <td><a href="#" class="view-image" data-url="${row.foto_url}">Lihat</a></td>
+            `;
+            tbody.appendChild(tr);
+          });
+
+          // Event listener untuk gambar popup
+          document.querySelectorAll('.view-image').forEach(link => {
+            link.addEventListener('click', e => {
+              e.preventDefault();
+              const imageUrl = e.target.dataset.url;
+              document.getElementById('modal-image').src = imageUrl;
+              document.getElementById('image-modal').style.display = 'flex';
+            });
+          });
+        } else {
+          alert("Gagal mengambil data: " + json.error);
+        }
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
+        alert("Terjadi kesalahan saat mengambil data");
+      });
+
+    // Modal close handler
+    document.getElementById('close-modal').onclick = () => {
+      document.getElementById('image-modal').style.display = 'none';
+    };
+
+    // Close modal jika klik di luar gambar
+    window.onclick = (event) => {
+      if (event.target === document.getElementById('image-modal')) {
+        document.getElementById('image-modal').style.display = 'none';
+      }
+    };
+  </script>
+</body>
+</html>
