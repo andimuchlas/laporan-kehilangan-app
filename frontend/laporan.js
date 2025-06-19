@@ -4,8 +4,8 @@ document.getElementById('formLaporan').addEventListener('submit', async function
   const formData = new FormData(this);
   const statusEl = document.getElementById('status');
 
-  // Definisikan URL API lengkap dengan protokol HTTPS
-  const apiUrl = 'https://laporan-kehilangan-app-production.up.railway.app/api/laporan.php';
+  // Definisikan URL API LENGKAP ke server EC2 Anda
+  const apiUrl = 'http://54.169.187.82:8080/backend/api/laporan.php';
 
   console.log('📤 Mengirim data ke:', apiUrl);
   console.log('📝 Isi FormData:', [...formData.entries()]);
@@ -14,7 +14,7 @@ document.getElementById('formLaporan').addEventListener('submit', async function
   statusEl.style.color = 'orange';
 
   try {
-    const response = await fetch(apiUrl, { // Menggunakan variabel apiUrl yang sudah benar
+    const response = await fetch(apiUrl, {
       method: 'POST',
       body: formData
     });
@@ -23,7 +23,7 @@ document.getElementById('formLaporan').addEventListener('submit', async function
     console.log('📥 Headers:', response.headers);
 
     const contentType = response.headers.get('content-type');
-    let rawResponse = await response.text(); // Baca semua dulu sebagai teks
+    let rawResponse = await response.text();
     console.log('📄 Isi response mentah:', rawResponse);
 
     if (!response.ok) {
@@ -33,6 +33,7 @@ document.getElementById('formLaporan').addEventListener('submit', async function
       throw new Error('Server error: ' + response.status);
     }
 
+    // Lanjutkan proses validasi JSON seperti kode Anda sebelumnya
     if (!contentType || !contentType.includes('application/json')) {
       console.warn('⚠️ Format response bukan JSON, melainkan:', contentType);
       statusEl.textContent = 'Gagal memproses response dari server. Format tidak sesuai.';
@@ -57,7 +58,6 @@ document.getElementById('formLaporan').addEventListener('submit', async function
       statusEl.style.color = 'green';
       this.reset();
     } else {
-      // Menampilkan pesan error dari backend jika ada
       const errorMessage = result.message || 'Terjadi kesalahan di server.';
       statusEl.textContent = `Gagal mengirim laporan: ${errorMessage}`;
       statusEl.style.color = 'red';
@@ -65,8 +65,5 @@ document.getElementById('formLaporan').addEventListener('submit', async function
     }
 
   } catch (error) {
-    statusEl.textContent = 'Terjadi kesalahan koneksi. Periksa internet Anda.';
-    statusEl.style.color = 'red';
-    console.error('❌ Kesalahan pada Fetch:', error);
-  }
-});
+    // Error ini kemungkinan besar akan muncul karena Mixed Content atau CORS
+    statusEl.textContent = 'Terjadi kesalahan koneksi. Cek console browser (F12).
