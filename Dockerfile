@@ -1,27 +1,45 @@
-# Gunakan image dasar PHP + Apache
+# =================
+# STAGE 1: Builder
+# =================
+# Di stage ini kita menginstal dependensi Composer
+FROM composer:2.7 as builder
+
+WORKDIR /app
+
+# Salin hanya file yang dibutuhkan Composer
+COPY composer.json composer.lock ./
+COPY backend/ ./backend/
+
+# Install dependensi. --no-dev untuk produksi
+RUN composer install --no-interaction --no-dev --optimize-autoloader
+
+# =================
+# STAGE 2: Final Image
+# =================
+# Ini adalah image akhir yang akan dijalankan
 FROM php:8.2-apache
 
-# Install dependensi sistem
+# Install ekstensi PHP yang dibutuhkan (hanya runtime dependencies)
 RUN apt-get update && apt-get install -y \
-    unzip \
     libpq-dev \
-    git \
-    && docker-php-ext-install pdo pdo_pgsql
+    && docker-php-ext-install pdo pdo_pgsql \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Enable Apache rewrite
+# Aktifkan mod_rewrite Apache
 RUN a2enmod rewrite
-
-# Install Composer (cara aman)
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # Set direktori kerja
 WORKDIR /var/www/html
 
-# Salin semua file dari project ke container
-COPY . .
+# Salin file aplikasi dari build context (lokal) ke container
+# Perhatikan kita menyalin ISI dari folder frontend, bukan folder itu sendiri
+COPY frontend/ .
 
-# Jalankan composer install
-RUN composer install --no-dev --optimize-autoloader
+# Salin folder API dari backend
+COPY backend/api/ ./api/
 
-# Permissions
+# Salin folder vendor hasil `composer install` dari stage 'builder'
+COPY --from=builder /app/vendor/ ./vendor/
+
+# Atur kepemilikan file agar Apache bisa membacanya
 RUN chown -R www-data:www-data /var/www/html
