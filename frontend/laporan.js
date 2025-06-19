@@ -4,7 +4,7 @@ document.getElementById('formLaporan').addEventListener('submit', async function
   const formData = new FormData(this);
   const statusEl = document.getElementById('status');
 
-  // Definisikan URL API LENGKAP ke server EC2 Anda
+  // Pastikan URL ini sudah benar menunjuk ke backend Anda
   const apiUrl = 'http://54.169.187.82:8080/backend/api/laporan.php';
 
   console.log('📤 Mengirim data ke:', apiUrl);
@@ -33,7 +33,6 @@ document.getElementById('formLaporan').addEventListener('submit', async function
       throw new Error('Server error: ' + response.status);
     }
 
-    // Lanjutkan proses validasi JSON seperti kode Anda sebelumnya
     if (!contentType || !contentType.includes('application/json')) {
       console.warn('⚠️ Format response bukan JSON, melainkan:', contentType);
       statusEl.textContent = 'Gagal memproses response dari server. Format tidak sesuai.';
@@ -65,5 +64,8 @@ document.getElementById('formLaporan').addEventListener('submit', async function
     }
 
   } catch (error) {
-    // Error ini kemungkinan besar akan muncul karena Mixed Content atau CORS
-    statusEl.textContent = 'Terjadi kesalahan koneksi. Cek console browser (F12).
+    statusEl.textContent = 'Terjadi kesalahan koneksi. Cek console browser (F12).';
+    statusEl.style.color = 'red';
+    console.error('❌ Kesalahan pada Fetch:', error);
+  }
+}); // <-- Mungkin error ada di sekitar sini, pastikan kurung dan titik koma sudah benar.
